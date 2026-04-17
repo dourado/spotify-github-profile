@@ -53,9 +53,32 @@ Please replace your old endpoint `https://spotify-github-profile.vercel.app` to 
 
 ![spotify-github-profile](/img/karaoke.svg)
 
+- Spotify Embed theme (NEW!)
+
+![spotify-github-profile](/img/spotify-embed.svg)
+
+## Running for development locally without Vercel
+
+To run the application locally without Vercel:
+
+1. Copy `.env.example` to `.env` in the root directory and replace the placeholder values with your actual configuration.
+
+2. Install the required dependencies:
+   ```sh
+   pip install -r api/requirements.txt
+   ```
+
+3. Run the application:
+   ```sh
+   python api/app.py
+   ```
+
+4. Access the login page at http://localhost:3000/api/login
+
+Note: Ensure your Spotify app's redirect URI is set to `http://localhost:3000/api/callback` and `BASE_URL` in `.env` is set to `http://localhost:3000/api`.
 
 
-## Running for development locally
+## Running for development locally with Vercel
 
 To develop locally, you need:
 
@@ -87,7 +110,9 @@ To develop locally, you need:
 ### Running locally
 
 - Install [Vercel command line](https://vercel.com/download) with `npm i -g vercel`
-- Create `.env` file at the root of the project and paste your keys in `SPOTIFY_CLIENT_ID`, `SPOTIFY_SECRET_ID`, and `FIREBASE`
+- Create `.env` file at the root of the project 
+- Paste your keys in `SPOTIFY_CLIENT_ID`, `SPOTIFY_SECRET_ID`, and insert the name of your downloaded JSON file in `FIREBASE`
+
 
 ```sh
 BASE_URL='https://localhost:3000/api'
@@ -105,6 +130,28 @@ Vercel CLI 20.1.2 dev (beta) — https://vercel.com/feedback
 ```
 
 - Now try to access https://localhost:3000/api/login
+
+### Run unittest
+
+- Run all tests
+```sh
+pytest tests/ -v
+```
+
+- Run tests with coverage
+```sh
+pytest tests/ --cov=api --cov-report=html
+```
+
+- Run specific test file
+```sh
+pytest tests/test_api_view.py -v
+```
+
+- Run with maxfail (like CI)
+```sh
+pytest tests/ --maxfail=5 --disable-warnings -v
+```
 
 ## How to Contribute
 

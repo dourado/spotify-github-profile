@@ -21,7 +21,8 @@ print(f"Decoded config: {decoded_config}")  # Para depuração
 firebase_dict = json.loads(decoded_config)
 
 cred = credentials.Certificate(firebase_dict)
-firebase_admin.initialize_app(cred)
+if not firebase_admin._apps:
+    firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 

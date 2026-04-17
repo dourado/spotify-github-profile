@@ -70,7 +70,7 @@
     <div class="container">
       <br><br>
       <div class="row center">
-        <h2 class="header center orange-text">Markdown code</h2>
+        <h2 class="header center orange-text">Markdown Code</h2>
       </div>
 
       <div class="row center">
@@ -88,12 +88,6 @@
         </div>
         <div class="col s12 m3">
           <label class="row">
-            <input type="checkbox" class="filled-in" id="org-mode-checkbox" />
-            <span>Org-Mode Snippet</span>
-          </label>
-        </div>
-        <div class="col s12 m3">
-          <label class="row">
             <input type="checkbox" class="filled-in" id="show-offline-checkbox" />
             <span>Show Offline</span>
           </label>
@@ -105,6 +99,12 @@
               <span>Interchange Artist with Song name</span>
             </label>
           </div>
+        <div class="col s12 m3">
+          <label class="row">
+            <input type="checkbox" class="filled-in" id="profanity-checkbox" />
+            <span>Censor Profanity</span>
+          </label>
+        </div>
       </div>
 
       <div class="row center">
@@ -115,6 +115,8 @@
             <option value="natemoo-re">natemoo-re</option>
             <option value="novatorem">novatorem</option>
             <option value="karaoke">karaoke</option>
+            <option value="apple">apple</option>
+            <option value="spotify-embed">spotify-embed</option>
           </select>
           <label>Choose theme</label>
         </div>
@@ -142,6 +144,16 @@
         </div>
       </div>
 
+      <div class="row center" id="mode-row" style="display: none;">
+        <div class="input-field col s12 m8 offset-m2">
+          <select id="mode-select">
+            <option value="light" selected>Light</option>
+            <option value="dark">Dark</option>
+          </select>
+          <label>Choose mode</label>
+        </div>
+      </div>
+
       <div class="row center">
         <div class="col s0 m1"></div>
         <div class="col s12 m10">
@@ -162,6 +174,29 @@
       <div class="row center">
         <img id="example-view" />
       </div>
+
+      <div class="row center">
+        <h2 class="header center orange-text">HTML Code</h2>
+      </div>
+
+      <div class="row center">
+        <div class="col s0 m1"></div>
+        <div class="col s12 m10">
+          <textarea id="html-code"
+            style="width: 100%;height: 100px; padding: 10px;"></textarea>
+        </div>
+        <div class="col s0 m1"></div>
+      </div>
+
+      <div class="row center">
+        <div style="margin-top: 20px; margin-bottom: 20px;">
+          <button class="waves-effect waves-light btn green darken-3" data-clipboard-target="#html-code">
+            <i class="material-icons left">content_copy</i> Copy to clipboard
+          </button>
+        </div>
+      </div>
+
+      
       <br><br>
 
     </div>
@@ -193,6 +228,7 @@
   <script>
     var uid = "{{uid}}";
     var markdownCodeTextArea = $('#markdown-code');
+    var htmlCodeTextArea = $('#html-code');
     var exampleView = $("#example-view");
     var urlParams = {
       uid: uid,
@@ -200,13 +236,13 @@
       theme: 'default',
       show_offline: false,
       background_color: "121212",
-      interchange:false
+      interchange:false,
+      profanity: false
     };
     var openSong = false;
-    var orgMode = false;
 
     function updateUrl() {
-      var viewUrl = `{{BASE_URL}}/view${orgMode ? '.svg': ''}?`;
+      var viewUrl = `{{BASE_URL}}/view?`;
       var viewUrlWithParams = viewUrl + $.param(urlParams, true);
       var url = "https://github.com/lucascdourado/spotify-github-profile";
       if (openSong) {
@@ -214,7 +250,15 @@
       }
 
       exampleView.attr('src', viewUrlWithParams);
-      markdownCodeTextArea.text(orgMode ? `[[${url}][${viewUrlWithParams})]]`: `[![spotify-github-profile](${viewUrlWithParams})](${url})`);
+      markdownCodeTextArea.text(`[![spotify-github-profile](${viewUrlWithParams})](${url})`);
+      
+      // Generate HTML code
+      var htmlCode = `<p align="center">
+  <a href="${url}">
+    <img src="${viewUrlWithParams}">
+  </a>
+</p>`;
+      htmlCodeTextArea.text(htmlCode);
     }
 
     updateUrl();
@@ -233,25 +277,41 @@
       updateUrl();
     });
 
-    $("#org-mode-checkbox").change(function() {
-      orgMode = this.checked;
-      updateUrl();
-    });
 
     $("#show-offline-checkbox").change(function() {
       urlParams.show_offline = this.checked;
       updateUrl();
     });
 
+    $("#profanity-checkbox").change(function() {
+      urlParams.profanity = this.checked;
+      updateUrl();
+    });
+
     $('#theme-select').change(function() {
+      // Reset visibility defaults
       $('.bar-color').show();
+      $('#mode-row').hide();
+
+      // Trigger color inputs to keep in sync when visible
       $('#bar_color').trigger('change');
       $('#bar_color_cover').trigger('change');
-      if (['compact', 'karaoke'].includes(this.value)) {
+
+      // Hide bar-color controls for themes that don't use them
+      if (['compact', 'karaoke', 'apple'].includes(this.value)) {
         $('.bar-color').hide();
-        delete urlParams.bar_color_cover
-        delete urlParams.bar_color
+        delete urlParams.bar_color_cover;
+        delete urlParams.bar_color;
       }
+
+      // Manage Apple-specific mode selector and param
+      if (this.value === 'apple' || this.value === 'spotify-embed') {
+        $('#mode-row').show();
+        urlParams.mode = $('#mode-select').val();
+      } else {
+        delete urlParams.mode;
+      }
+
       urlParams.theme = this.value;
       updateUrl();
     });
@@ -271,8 +331,19 @@
       updateUrl();
     });
 
+    $('#mode-select').change(function() {
+      var themeSelected = $('#theme-select').val();
+      if (themeSelected === 'apple' || themeSelected === 'spotify-embed') {
+        urlParams.mode = this.value;
+      } else {
+        delete urlParams.mode;
+      }
+      updateUrl();
+    });
+ 
     $(document).ready(function(){
       $('#theme-select').formSelect();
+      $('#mode-select').formSelect();
     });
   </script>
 
