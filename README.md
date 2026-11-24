@@ -64,7 +64,7 @@ You can customize the appearance by adding query parameters to your URL:
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `theme` | Theme to use (`default`, `compact`, `natemoo-re`, `novatorem`, `karaoke`, `spotify-embed`, `apple`) | `default` |
-| `background_color` | Background color (hex without #) | `121212` |
+| `background_color` | Background color (hex without #). The `spotify-embed` theme also accepts `transparent` | `121212` |
 | `border_radius` | Border radius in pixels | `10` |
 | `bar_color` | Equalizer bar color (hex without #) | `53b14f` |
 | `bar_color_cover` | Extract bar color from album cover (`true`/`false`) | `false` |
