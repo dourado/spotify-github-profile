@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spotify GitHub Profile</title>
+<style>
+  :root { --bg:#ffffff; --fg:#1a1a1a; --muted:#666; --line:#e2e2e2; --code:#f4f4f4; --accent:#1a8f3c; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#121212; --fg:#eaeaea; --muted:#9a9a9a; --line:#2c2c2c; --code:#1e1e1e; --accent:#53b14f; }
+  }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui, sans-serif; }
+  main { max-width:44rem; margin:0 auto; padding:2.5rem 1rem; }
+  h1 { font-size:1.5rem; margin:0 0 .25rem; }
+  p.sub { color:var(--muted); margin:0 0 2rem; }
+  ul { list-style:none; padding:0; margin:0; border-top:1px solid var(--line); }
+  li { padding:.9rem 0; border-bottom:1px solid var(--line); }
+  a { color:var(--accent); font-family:ui-monospace, monospace; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  .desc { display:block; color:var(--muted); font-size:.9rem; margin-top:.2rem; }
+  code { background:var(--code); padding:.1rem .35rem; border-radius:4px; font-size:.85em; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Spotify GitHub Profile</h1>
+  <p class="sub">Available routes</p>
+  <ul>
+    <li><a href="/api/login">/api/login</a><span class="desc">Sign in with Spotify and get your <code>uid</code>.</span></li>
+    <li><a href="/api/callback">/api/callback</a><span class="desc">OAuth callback used by Spotify after login. Not meant to be opened directly.</span></li>
+    <li><a href="/api/view">/api/view?uid=YOUR_UID</a><span class="desc">Now-playing card as HTML. Options: <code>theme</code>, <code>cover_image</code>, <code>bar_color</code>, <code>background_color</code>, <code>mode</code>, <code>border_radius</code>, <code>show_offline</code>, <code>hide_remaster</code>.</span></li>
+    <li><a href="/api/view.svg">/api/view.svg?uid=YOUR_UID</a><span class="desc">Same card as SVG, for use in a README image.</span></li>
+  </ul>
+</main>
+</body>
+</html>
