@@ -331,6 +331,8 @@ def test_load_image_error_handling(mock_load_image):
     ("ff0000", "000000", "light"),
     ("00ff00", "ffffff", "dark"), 
     ("0000ff", "121212", "light"),
+    ("00ff00", "transparent", "dark"),
+    ("00ff00", "red;}</style>", "dark"),  # invalid values fall back to the default
     ("", "", "")  # test default values
 ])
 @patch('api.view.get_song_info')

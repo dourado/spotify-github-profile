@@ -10,7 +10,9 @@
       
       .spotify-embed-container {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-        {% if mode == 'dark' %}
+        {% if background_color == 'transparent' %}
+        background-color: transparent;
+        {% elif mode == 'dark' %}
         background-color: #181818;
         {% else %}
         background-color: #ffffff;

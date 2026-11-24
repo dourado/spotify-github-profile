@@ -366,6 +366,11 @@ def catch_all(path):
     if not re.match(r'^\d+$', border_radius):
         border_radius = "10"
 
+    if background_color != "transparent" and not re.fullmatch(
+        r"[0-9a-fA-F]{3}|[0-9a-fA-F]{6}", background_color
+    ):
+        background_color = "121212"
+
     try:
         item, is_now_playing, progress_ms, duration_ms = get_song_info(
             uid, show_offline
